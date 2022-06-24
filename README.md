@@ -1,16 +1,18 @@
 ## Convert a FishEye image to an EquiRectangular image
 
 
-This project converts single fisheye images to an 2:1 equirectangular images or 1:1 square images.
+This project attempts to convert single fisheye images to 2:1 equirectangular images or 1:1 square images.
 
 <br />
 <br />
 <br />
 
-The idea of conversion is simple but implementation in glsl can lead to unexpected output.
+The mathematics of the conversion is simple but implementation in glsl can lead to unexpected output.
 
-In general, when one needs to convert a 2D input image from one format into another, a 3D vector must be generated using the texture coordinates of the 2D output image which in OpenGL the range is [0.0, 1.0] for both the u-axis and v-axis. The 3D vector is then used to generate a pair of texture coordinates which is then used to access the input image.
+In general, when one needs to convert a 2D input image from one format into another, a 3D vector must be generated using the texture coordinates of the 2D output image, which in OpenGL, the range is [0.0, 1.0] for both the u-axis and v-axis. The 3D vector is then used to generate a pair of texture coordinates which is then used to access the input image.
 
+<br />
+<br />
 
 Refer to the source code of the fragment shader *FishEyeFragmentShader1.glsl*.
 
@@ -41,7 +43,7 @@ The values of the 2 angles are then used to calculate the radius, *r*.
 
 
 
-Finally, the value of the point passed in as a parameter to the function is expressed in pixel coordinate system of the fisheye image.
+Finally, the value of the point passed in as a parameter to the function is expressed in the pixel coordinate system of the fisheye image.
 
  ```glsl
 
