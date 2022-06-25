@@ -1,9 +1,13 @@
 /*
-See LICENSE folder for this sample’s licensing information.
 
-Abstract:
-Header for the collection of OpenGL headers and definitions.
+ OpenGLRenderer
+ FisheyeToEquiRectangular
+
+ Created by Mark Lim Pak Mun on 24/06/2022.
+ Ported from Apple's MigratingOpenGLCodeToMetal
+
 */
+
 #ifndef AAPLGLHeaders_h
 #define AAPLGLHeaders_h
 
