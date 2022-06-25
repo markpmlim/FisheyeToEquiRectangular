@@ -1,9 +1,13 @@
 /*
-See LICENSE folder for this sample’s licensing information.
 
-Abstract:
-Header for the cross-platform view controller and cross-platform view that displays OpenGL content.
+ OpenGLRenderer
+ FisheyeToEquiRectangular
+
+ Created by Mark Lim Pak Mun on 24/06/2022.
+ Ported from Apple's MigratingOpenGLCodeToMetal
+
 */
+
 
 #if defined(TARGET_IOS) || defined(TARGET_TVOS)
 @import UIKit;
