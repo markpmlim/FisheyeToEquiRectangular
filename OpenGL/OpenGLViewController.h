@@ -4,7 +4,7 @@
  FisheyeToEquiRectangular
 
  Created by Mark Lim Pak Mun on 24/06/2022.
- Ported from Apple's MigratingOpenGLCodeToMetal
+ Ported from Apple's MigratingOpenGLCodeToMetal Project
 
 */
 
