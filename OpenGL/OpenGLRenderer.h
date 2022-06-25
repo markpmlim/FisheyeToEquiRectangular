@@ -1,8 +1,11 @@
 /*
-See LICENSE folder for this sample’s licensing information.
 
-Abstract:
-Header for the renderer class that performs OpenGL state setup and per-frame rendering.
+ OpenGLRenderer
+ FisheyeToEquiRectangular
+
+ Created by Mark Lim Pak Mun on 24/06/2022.
+ Ported from Apple's MigratingOpenGLCodeToMetal
+
 */
 
 #import <Foundation/Foundation.h>
