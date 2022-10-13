@@ -46,7 +46,7 @@
         NSBundle *mainBundle = [NSBundle mainBundle];
         NSURL *vertexSourceURL = [mainBundle URLForResource:@"SimpleVertexShader"
                                               withExtension:@"glsl"];
-        NSURL *fragmentSourceURL = [mainBundle URLForResource:@"FishEyeFragmentShader1"
+        NSURL *fragmentSourceURL = [mainBundle URLForResource:@"FishEyeFragmentShader"
                                                 withExtension:@"glsl"];
         _glslProgram = [OpenGLRenderer buildProgramWithVertexSourceURL:vertexSourceURL
                                                  withFragmentSourceURL:fragmentSourceURL];
@@ -331,15 +331,6 @@
             free(log);
         }
     }
-
-    //GLint samplerLoc = glGetUniformLocation(prgName, "baseColorMap");
-
-    //NSAssert(samplerLoc >= 0, @"No uniform location found from `baseColorMap`.");
-
-    //glUseProgram(prgName);
-
-    // Indicate that the diffuse texture will be bound to texture unit 0.
-   // glUniform1i(samplerLoc, AAPLTextureIndexBaseColor);
 
     GetGLError();
 
