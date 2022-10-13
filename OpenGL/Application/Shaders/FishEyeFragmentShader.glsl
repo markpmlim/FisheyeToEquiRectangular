@@ -1,26 +1,15 @@
-/*
+// Fisheye to spherical conversion (aka equirectangular projection)
+// Assumes the fisheye image is square, centered, and the circle fills the image.
+// Output (spherical) image should have 2:1 aspect
 
-https://stackoverflow.com/questions/46883320/conversion-from-dual-fisheye-coordinates-to-equirectangular-coordinates
+#ifdef GL_ES
+precision mediump float;
+#endif
 
-You are building the equirectangular image, so I would suggest you to use the inverse mapping.
-
-Start with pixel locations in the target image you are painting. Convert the 2D location to longitude/latitude.
-Then convert that to a 3D point on the surface of the unit sphere.
-Then convert from the 3D point to a location in the 2D fisheye source image.
-In Paul Bourke page, you would start with the bottom equation, then the rightmost one, then the topmost one.
-
-Use landmark points like 90° long 0° lat, to verify the results make sense at each step.
-
-The final result should be a location in the source fisheye image in the [-1..+1] range. Remap to pixel or to UV as needed.
-Since the source is split in two eye images you will also need a mapping from target (equirect) longitudes to the
-correct source sub-image.
-
-*/
 #if __VERSION__ >= 140
-
 in vec2 texCoords;
 
-out vec4 FragCoord;
+out vec4 FragColor;
 
 #else
 
@@ -29,53 +18,135 @@ varying vec2 texCoords;
 #endif
 
 uniform sampler2D fishEyeImage;
-uniform float FOV;
-uniform vec2 u_resolution;  // Canvas size (width, height)
+uniform vec2 u_resolution;  // Input image size (width, height)
+uniform vec2 u_mouse;       // mouse position in screen pixels (unused)
+uniform float u_time;       // Time in seconds since load (unused)
+uniform float FOV;          // in degrees
+
+
+#define iResolution u_resolution
+#define iMouse      u_mouse
+#define iTime       u_time
 
 const float PI = 3.14159265359;
 
-// incoming uv are the texture coords of a point on the equirectangular image.
-void main() {
-    // Range of incoming texcoords: [0.0, 1.0]
-    vec2 uv = texCoords;
+// Identical output for both fish2sphere functions
+/*
+ Convert pair of pixel coordinates to FishEye space.
+ The ratio of the dimensions of the FishEye image is expected to be 1:1
+ The ratio of the dimensions of the output image is 2:1
+ A port of Paul Bourke's kernel function "fish2sphere" written in OpenGL GLSL
+ */
 
-    // Range of longitude: [-π, π]
-    // Range of  latitude: [-π/2, π/2]
-    float longitude = 2 * PI * (uv.x - 0.5);
-    float latitude =      PI * (uv.y - 0.5);
+// Gives the same output as fish2sphere2.
+// We modify the code slightly by swapping psph.y and psph.z
+vec2 fish2sphere(vec2 destCoord) {
+    vec2 pfish;
+    vec3 psph;
+    
+    //float FOV = 3.141592654;      // FOV of the fisheye, eg: 180 degrees
+    float width = u_resolution.x;   // pass resolution of fisheye texture
+    float height = u_resolution.y;
+    
+    // Polar angles
+    // [0, input_image.width] --> [-0.5, 0.5]
+    // [0, input_image.height] --> [-0.5, 0.5]
+    // Range for longitude: 2 * π * [-0.5, 0.5] --> [-π, +π]
+    // Range for  latitude:     π * [-0.5, 0.5] --> [-π/2, +π/2]
+    // The width of the equirectangular image twice that its height
+    //  so we must multiply by 2.
+    float longitude = 2 * PI * (destCoord.x / width - 0.5);     // -π to π
+    float latitude  =     PI * (destCoord.y / height - 0.5);    // -π/2 to π/2
+    
+    // Vector in 3D space
+    // Convert from polar coords to (x, y, z) vector
+    psph.x = cos(latitude) * sin(longitude);
+    psph.y = sin(latitude);
+    psph.z = cos(latitude) * cos(longitude);
+    
+    // Calculate fisheye angle and radius
+    float theta = atan(psph.y, psph.x);
+    // Don't multiply the value returned by atan() by 2
+    float phi = atan(sqrt(psph.x*psph.x + psph.y*psph.y),
+                     psph.z);
+    // Compute the radius
+    float r = width * phi / radians(FOV);
+    
+    // Pixel in fisheye space
+    pfish.x = 0.5 * width + r * cos(theta);
+    pfish.y = 0.5 * width + r * sin(theta);
+    // pfish.x and pfish.y can take negative values.
+    // They can also be > the fisheye's texture width/height.
 
-    vec3 p = vec3(cos(latitude) * sin(longitude),
-                  sin(latitude),
-                  cos(latitude) * cos(longitude));
+    return vec2(pfish.x, pfish.y);
+}
 
-    // Range for theta: [-π, π]
-    float theta = atan(p.y, p.x);
-    // Almost identical to the code for single lens fisheye
-    // Range for r: is it [-π, π]???
-    float phi = atan(sqrt(p.x*p.x + p.y*p.y),
-                     p.z);
+// Paul Bourke's kernel function "fish2sphere" translated to OpenGL GLSL
+vec2 fish2sphere2(vec2 destCoord) {
+    vec2 pfish;
+    float theta, phi, r;
+    vec3 psph;
+    
+    float width = u_resolution.x;   // pass resolution of fisheye texture
+    float height = u_resolution.y;  // Assumes width and height are equal
+    
+    // Polar angles
+    // [0, input_image.width] --> [-0.5, 0.5]
+    // [0, input_image.height] --> [-0.5, 0.5]
+    // Range for longitude: 2 * π * [-0.5, 0.5] --> [-π, +π]
+    // Range for  latitude:     π * [-0.5, 0.5] --> [-π/2, +π/2]
+    // The width of the equirectangular image twice that its height
+    //  so we must multiply by 2.
+    float longtitude = 2.0 * PI * (destCoord.x / width - 0.5);  // -π to π
+    float latitude   =       PI * (destCoord.y / height - 0.5); // -π/2 to π/2
+    
+    // Vector in 3D space
+    // Convert from polar coords to (x, y, z) vector
+    psph.x = cos(latitude) * sin(longtitude);
+    psph.y = cos(latitude) * cos(longtitude);
+    psph.z = sin(latitude);
+    
+    // Calculate fisheye angle and radius
+    theta = atan(psph.z, psph.x);
+    // Don't multiply the value returned by atan() by 2
+    phi = atan(sqrt(psph.x*psph.x + psph.z*psph.z),
+               psph.y);
+    
+    // Compute the radius
+    r = width * phi / radians(FOV);
+    
+    // Pixel in fisheye space.
+    // The width and the height of the fisheye image are equal
+    pfish.x = 0.5 * width + r * cos(theta);
+    pfish.y = 0.5 * width + r * sin(theta);
+    // However, pfish.x and pfish.y can take negative values.
+    return vec2(pfish.x, pfish.y);
+}
 
-    // Any arbitrary positive number as long as its value does not exceed
-    //  the limits of a floating point number
-    float width = 2.0;
 
-    float r = width * phi/radians(FOV);
+/*
+ The fragments are sent in the form of a rectangular grid. We don't
+ need a double loop to process the colors of all fragments.
+ The width of the output image is twice that of the input fisheye image.
+ Their heights are equal.
 
-    /*
-     the original code:
-
-     uv = vec2(r * cos(theta), r * sin(theta));
-
-     does not work.
-
-     */
-    uv = vec2(0.5 * width + r * cos(theta),
-              0.5 * width + r * sin(theta));
-
-    uv /= width;
+ "texCoords" is the interpolated texture coordinates of the current
+  fragment of the output image which has a resolution of 2:1
+ */
+void main(void) {
+    // x: [0, 1] ---> [0, input_image.width]
+    // y: [0, 1] ---> [0, input_image.height]
+    // Since we are passing the resolution of the fisheye image,
+    //  u_resolution.x == u_resolution.y
+    vec2 destCoord = texCoords * u_resolution;
+    vec2 uv = fish2sphere(destCoord);
+    // We must request OpenGL to set texture wrap to GL_CLAMP_TO_BORDER
+    // Scale it to [0, 1.0]
+    uv /= u_resolution;
 #if __VERSION__ >= 140
-    FragCoord = texture(fishEyeImage, uv);
+    FragColor = texture(fishEyeImage, uv);
 #else
-    gl_FragCoord = texture2D(fishEyeImage, uv);
+    gl_FragColor = texture2D(fishEyeImage, uv);
 #endif
+
 }

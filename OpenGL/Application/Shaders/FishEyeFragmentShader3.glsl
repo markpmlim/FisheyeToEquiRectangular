@@ -33,12 +33,16 @@ const float PI = 3.14159265359;
 /*
  Convert to FishEye space.
  The ratio of the dimensions of the FishEye image is expected to be 1:1
+ The ratio of the dimensions of the output image is 1:1
  */
 vec2 mapToFisheyePointUV(vec2 inUV) {
 
-    // [0, 1] --> [-0.5, 0.5] --> [-π/2, π/2]
-    // The ratio of the dimensions of the output image is 1:1
-    float longtitude = PI * (inUV.x - 0.5);
+    // We must multiply by 2
+    // Range of inUV.x: [0.25, 0.75]
+    // Range of inUV.y: [0.0, 1.0]
+    // [0.25, 0.75] --> [-0.25, 0.25] --> [-π/2, π/2]
+    float longtitude = 2 * PI * (inUV.x - 0.5);
+    // [0.0, 1.0] --> [-0.5, 0.5] --> [-π/2, π/2]
     float latitude   = PI * (inUV.y - 0.5);
 
     // Convert from spherical coords to Cartesian coords
@@ -60,8 +64,6 @@ vec2 mapToFisheyePointUV(vec2 inUV) {
     // Range: [0.0, u_resolution.x]
     vec2 fisheyePoint;
     fisheyePoint.x = 0.5 * u_resolution.x + r * cos(theta);
-    // The ratio of the width and height of the fisheye image is 1:1.
-    // u_resolution.x = u_resolution.y
     fisheyePoint.y = 0.5 * u_resolution.x + r * sin(theta);
 
     // Scale it back to [0, 1]
@@ -73,11 +75,19 @@ vec2 mapToFisheyePointUV(vec2 inUV) {
 /*
  The fragments are sent in the form of a rectangular grid. We don't
  need a double loop to process the colors of all fragments.
+
+ The single fisheye image is mapped to an equirectangular plane.
  "texCoords" is the interpolated texture coordinates of the current
-  fragment of the output image which has a resolution of 1:1
+  fragment of the output image which has a resolution of 2:1
  */
 void main(void) {
-    vec2 uv = mapToFisheyePointUV(texCoords);
+    vec2 uv = vec2(0);
+    // The unwarped fisheye image will be projected at the centre of the
+    //  the equirectangular image. The rest of the equirectangular image
+    //  will be the background color which is black.
+    if (texCoords.x >= 0.25 && texCoords.x <= 0.75)
+        uv = mapToFisheyePointUV(texCoords);
+    // No need to set texture wrap to GL_CLAMP_TO_BORDER
     #if __VERSION__ >= 140
         FragColor = texture(fishEyeImage, uv);
     #else

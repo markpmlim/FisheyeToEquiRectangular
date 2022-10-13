@@ -1,84 +1,82 @@
-// https://stackoverflow.com/questions/56986420/convert-a-fisheye-image-to-an-equirectangular-image-with-opencv4
-// Fisheye to spherical conversion
-// Assumes the fisheye image is square, centered, and the circle fills the image.
-// Output image should have 1:1 aspect
+/*
 
-#ifdef GL_ES
-precision mediump float;
-#endif
+https://stackoverflow.com/questions/46883320/conversion-from-dual-fisheye-coordinates-to-equirectangular-coordinates
 
+You are building the equirectangular image, so I would suggest you to use the inverse mapping.
+
+Start with pixel locations in the target image you are painting. Convert the 2D location to longitude/latitude.
+Then convert that to a 3D point on the surface of the unit sphere.
+Then convert from the 3D point to a location in the 2D fisheye source image.
+In Paul Bourke page, you would start with the bottom equation, then the rightmost one, then the topmost one.
+
+Use landmark points like 90° long 0° lat, to verify the results make sense at each step.
+
+The final result should be a location in the source fisheye image in the [-1..+1] range. Remap to pixel or to UV as needed.
+Since the source is split in two eye images you will also need a mapping from target (equirect) longitudes to the
+correct source sub-image.
+
+*/
 #if __VERSION__ >= 140
+
 in vec2 texCoords;
 
-out vec4 FragColor;
+out vec4 FragCoord;
 
 #else
 
-in vec2 texCoords;
+varying vec2 texCoords;
 
 #endif
 
 uniform sampler2D fishEyeImage;
-uniform vec2 u_resolution;  // Input Image size (width, height)
-uniform vec2 u_mouse;       // mouse position in screen pixels (unused)
-uniform float u_time;       // Time in seconds since load (unused)
 uniform float FOV;
-
-#define iResolution u_resolution
-#define iMouse      u_mouse
-#define iTime       u_time
+uniform vec2 u_resolution;  // Canvas size (width, height)
 
 const float PI = 3.14159265359;
 
-/*
- Convert to FishEye space.
- The ratio of the dimensions of the FishEye image is expected to be 1:1
- The ratio of the dimensions of the output image is 1:1
- */
-vec2 mapToFisheyePointUV(vec2 inUV) {
+// incoming uv are the texture coords of a point on the equirectangular image.
+// The fisheye's image resolution is not used.
+void main() {
+    // Range of incoming texcoords: [0.0, 1.0]
+    vec2 uv = texCoords;
 
-    // [0, 1] --> [-0.5, 0.5] --> [-π/2, π/2]
-    float longtitude = PI * (inUV.x - 0.5);
-    float latitude   = PI * (inUV.y - 0.5);
+    // Range of longitude: [-π2,  π2]
+    // Range of  latitude: [-π/2, π/2]
+    float longitude = PI * (uv.x - 0.5);
+    float latitude  = PI * (uv.y - 0.5);
 
-    // Convert from spherical coords to Cartesian coords
-    vec3 sphericalPoint;
-    sphericalPoint.x = cos(latitude) * sin(longtitude);
-    sphericalPoint.y = sin(latitude);
-    sphericalPoint.z = cos(latitude) * cos(longtitude);
+    vec3 p = vec3(cos(latitude) * sin(longitude),
+                  sin(latitude),
+                  cos(latitude) * cos(longitude));
 
     // Range for theta: [-π, π]
-    float theta = atan(sphericalPoint.y,
-                       sphericalPoint.x);
-    // Range for phi: [-π, π]
-    // Don't multiply the value returned by atan() by 2
-    float phi = atan(sqrt(pow(sphericalPoint.x,2) + pow(sphericalPoint.y,2)),
-                     sphericalPoint.z);
+    float theta = atan(p.y, p.x);
+    // Almost identical to the code for single lens fisheye
+    // Range for r: is it [-π, π]???
+    float phi = atan(sqrt(p.x*p.x + p.y*p.y),
+                     p.z);
 
-    float r = u_resolution.x * phi / radians(FOV);
+    // Any arbitrary non-zero positive number as long as its value
+    //  does not exceed the limits of a floating point number.
+    float width = 2.0;
 
-    // Range: [0.0, u_resolution.x]
-    vec2 fisheyePoint;
-    fisheyePoint.x = 0.5 * u_resolution.x + r * cos(theta);
-    fisheyePoint.y = 0.5 * u_resolution.x + r * sin(theta);
-    //fisheyePoint.y = 0.5 * u_resolution.y + r * sin(theta);
+    float r = width * phi/radians(FOV);
 
-    // Scale it back to [0, 1]
-    vec2 uv = fisheyePoint/u_resolution.x;
+    /*
+     the original code:
 
-    return uv;
-}
+     uv = vec2(r * cos(theta), r * sin(theta));
 
-/*
- The fragments are sent in the form of a rectangular grid. We don't
- need a double loop to process the colors of all fragments.
- */
-void main(void) {
-    vec2 uv = mapToFisheyePointUV(texCoords);
-    // We may have to request OpenGL to set texture wrap to GL_CLAMP_TO_BORDER
-    #if __VERSION__ >= 140
-        FragColor = texture(fishEyeImage, uv);
-    #else
-        gl_FragColor = texture2D(fishEyeImage, uv);
-    #endif
+     does not work.
+
+     */
+    uv = vec2(0.5 * width + r * cos(theta),
+              0.5 * width + r * sin(theta));
+
+    uv /= width;
+#if __VERSION__ >= 140
+    FragCoord = texture(fishEyeImage, uv);
+#else
+    gl_FragCoord = texture2D(fishEyeImage, uv);
+#endif
 }
