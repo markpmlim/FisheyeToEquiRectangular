@@ -50,17 +50,18 @@
                                                 withExtension:@"glsl"];
         _glslProgram = [OpenGLRenderer buildProgramWithVertexSourceURL:vertexSourceURL
                                                  withFragmentSourceURL:fragmentSourceURL];
-        //NSLog(@"%@", fragmentSourceURL);
-        printf("%u\n", _glslProgram);
+        //printf("%u\n", _glslProgram);
         _resolutionLoc = glGetUniformLocation(_glslProgram, "u_resolution");
         _mouseLoc = glGetUniformLocation(_glslProgram, "u_mouse");
         _timeLoc = glGetUniformLocation(_glslProgram, "u_time");
+
         _fovLoc = glGetUniformLocation(_glslProgram, "FOV");
         //printf("%d %d %d\n", _resolutionLoc, _mouseLoc, _timeLoc);
-        _fishEyeTextureID = [self textureWithContentsOfFile:@"TestImage.jpg"
+        _fishEyeTextureID = [self textureWithContentsOfFile:@"PicassoTower.jpg"
                                                  resolution:&_tex0Resolution
                                                       isHDR:NO];
-        printf("%f %f\n", _tex0Resolution.width, _tex0Resolution.height);
+        printf("Resolution of Fisheye image:width:%f height:%f\n",
+               _tex0Resolution.width, _tex0Resolution.height);
         glBindVertexArray(0);
     }
 
@@ -73,14 +74,15 @@
 }
 
 
-// We have set the view port's resolution as 2:1
+// We have set the view port's resolution as 2:1 in IB
 - (void)resize:(CGSize)size
 {
     // Handle the resize of the draw rectangle. In particular, update the perspective projection matrix
     // with a new aspect ratio because the view orientation, layout, or size has changed.
     _viewSize = size;
     float aspect = (float)size.width / size.height;
-    printf("%f %f\n", _viewSize.width, _viewSize.height);
+    printf("Resizing:width:%f height:%f aspect ratio aspect:%f\n",
+           _viewSize.width, _viewSize.height, aspect);
     // Unused
     _projectionMatrix = matrix_perspective_right_hand_gl(65.0f * (M_PI / 180.0f),
                                                          aspect,
@@ -127,7 +129,7 @@
             stbi_image_free(data);
         }
         else {
-            printf("");
+            NSLog(@"Problem reading graphic image:%@", name);
             exit(1);
         }
     }
@@ -144,7 +146,7 @@
                                                                          options:loaderOptions
                                                                            error:&error];
         if (error != nil) {
-            NSLog(@"%@: error encountered reading files", error);
+            NSLog(@"%@: error encountered reading image file:%@", error, name);
             exit(2);
         }
         // Ask OpenGL to set texture wrap to GL_CLAMP_TO_BORDER
@@ -172,11 +174,12 @@
     glUseProgram(_glslProgram);
     glUniform1f(_timeLoc, _currentTime);
     glUniform2f(_mouseLoc, _mouseCoords.x, _mouseCoords.y);
-    // Use FishEyeFragmentShader1.glsl to get an output
-    //  with the dimensions 2:1
-    
-    // Use FishEyeFragmentShader2.glsl to get an output
-    //  with the dimensions 1:1
+
+    // Use FishEyeFragmentShader.glsl or FishEyeFragmentShader3.glsl
+    //  to get an output with the dimensions 2:1
+
+    // Use FishEyeFragmentShader1.glsl or FishEyeFragmentShader2.glsl
+    //  to get an output with the dimensions 1:1.
     // Pass the dimensions of the fisheye image.
     glUniform2f(_resolutionLoc,
                 _tex0Resolution.width, _tex0Resolution.height);
