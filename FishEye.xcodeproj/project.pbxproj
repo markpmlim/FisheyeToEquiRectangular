@@ -19,16 +19,18 @@
 		3A8BF91B22BC13DF0037A7F0 /* OpenGLRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4DDD462283CE4D0095BC87 /* OpenGLRenderer.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
 		3AFFA01122A1F0C900D8184A /* OpenGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFFA00B22A1F0C900D8184A /* OpenGLViewController.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
 		3AFFA01222A1F0C900D8184A /* OpenGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFFA00B22A1F0C900D8184A /* OpenGLViewController.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
-		EE3C92D72856E30B0048D12C /* TestImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE3C92D62856E30B0048D12C /* TestImage.jpg */; };
-		EE3C92D82856E30B0048D12C /* TestImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE3C92D62856E30B0048D12C /* TestImage.jpg */; };
+		EE3C92D72856E30B0048D12C /* PicassoTower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE3C92D62856E30B0048D12C /* PicassoTower.jpg */; };
+		EE3C92D82856E30B0048D12C /* PicassoTower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EE3C92D62856E30B0048D12C /* PicassoTower.jpg */; };
 		EE6B20BC284B482800027AD7 /* SimpleVertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EE6B20B9284B482800027AD7 /* SimpleVertexShader.glsl */; };
 		EE6B20BD284B482800027AD7 /* SimpleVertexShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EE6B20B9284B482800027AD7 /* SimpleVertexShader.glsl */; };
-		EEA83ABE284C957000C43B68 /* FishEyeFragmentShader2.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EEA83ABC284C957000C43B68 /* FishEyeFragmentShader2.glsl */; };
-		EEA83ABF284C957000C43B68 /* FishEyeFragmentShader2.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EEA83ABC284C957000C43B68 /* FishEyeFragmentShader2.glsl */; };
-		EEA83AC0284C957000C43B68 /* FishEyeFragmentShader1.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EEA83ABD284C957000C43B68 /* FishEyeFragmentShader1.glsl */; };
-		EEA83AC1284C957000C43B68 /* FishEyeFragmentShader1.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EEA83ABD284C957000C43B68 /* FishEyeFragmentShader1.glsl */; };
-		EECEE4D5284B8BA80057D585 /* FishEyeFragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EECEE4D4284B8BA80057D585 /* FishEyeFragmentShader.glsl */; };
-		EECEE4D6284B8BA80057D585 /* FishEyeFragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EECEE4D4284B8BA80057D585 /* FishEyeFragmentShader.glsl */; };
+		EE97F97128F66C4000162288 /* FishEyeFragmentShader3.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EE97F97028F66C4000162288 /* FishEyeFragmentShader3.glsl */; };
+		EE97F97228F66C4000162288 /* FishEyeFragmentShader3.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EE97F97028F66C4000162288 /* FishEyeFragmentShader3.glsl */; };
+		EEA83ABE284C957000C43B68 /* FishEyeFragmentShader1.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EEA83ABC284C957000C43B68 /* FishEyeFragmentShader1.glsl */; };
+		EEA83ABF284C957000C43B68 /* FishEyeFragmentShader1.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EEA83ABC284C957000C43B68 /* FishEyeFragmentShader1.glsl */; };
+		EEA83AC0284C957000C43B68 /* FishEyeFragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EEA83ABD284C957000C43B68 /* FishEyeFragmentShader.glsl */; };
+		EEA83AC1284C957000C43B68 /* FishEyeFragmentShader.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EEA83ABD284C957000C43B68 /* FishEyeFragmentShader.glsl */; };
+		EECEE4D5284B8BA80057D585 /* FishEyeFragmentShader2.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EECEE4D4284B8BA80057D585 /* FishEyeFragmentShader2.glsl */; };
+		EECEE4D6284B8BA80057D585 /* FishEyeFragmentShader2.glsl in Resources */ = {isa = PBXBuildFile; fileRef = EECEE4D4284B8BA80057D585 /* FishEyeFragmentShader2.glsl */; };
 		EED40C03286171DC0097435C /* fish2sphere180.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EED40C00286171DC0097435C /* fish2sphere180.jpg */; };
 		EED40C04286171DC0097435C /* fish2sphere180.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EED40C00286171DC0097435C /* fish2sphere180.jpg */; };
 /* End PBXBuildFile section */
@@ -51,13 +53,14 @@
 		3ABD52F22283BC300050D28E /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3ABD530B2283CAB50050D28E /* OpenGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLViewController.h; sourceTree = "<group>"; };
 		3AFFA00B22A1F0C900D8184A /* OpenGLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLViewController.m; sourceTree = "<group>"; };
-		EE3C92D62856E30B0048D12C /* TestImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = TestImage.jpg; sourceTree = "<group>"; };
+		EE3C92D62856E30B0048D12C /* PicassoTower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PicassoTower.jpg; sourceTree = "<group>"; };
 		EE661EB128652D5700EA6DAD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; wrapsLines = 1; };
 		EE6B20B9284B482800027AD7 /* SimpleVertexShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SimpleVertexShader.glsl; sourceTree = "<group>"; };
-		EEA83ABC284C957000C43B68 /* FishEyeFragmentShader2.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FishEyeFragmentShader2.glsl; sourceTree = "<group>"; };
-		EEA83ABD284C957000C43B68 /* FishEyeFragmentShader1.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FishEyeFragmentShader1.glsl; sourceTree = "<group>"; };
+		EE97F97028F66C4000162288 /* FishEyeFragmentShader3.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FishEyeFragmentShader3.glsl; sourceTree = "<group>"; };
+		EEA83ABC284C957000C43B68 /* FishEyeFragmentShader1.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FishEyeFragmentShader1.glsl; sourceTree = "<group>"; };
+		EEA83ABD284C957000C43B68 /* FishEyeFragmentShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FishEyeFragmentShader.glsl; sourceTree = "<group>"; };
 		EECEE4D3284B8A670057D585 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
-		EECEE4D4284B8BA80057D585 /* FishEyeFragmentShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FishEyeFragmentShader.glsl; sourceTree = "<group>"; };
+		EECEE4D4284B8BA80057D585 /* FishEyeFragmentShader2.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FishEyeFragmentShader2.glsl; sourceTree = "<group>"; };
 		EED40C00286171DC0097435C /* fish2sphere180.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fish2sphere180.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -181,9 +184,10 @@
 		EE6B20B7284B47ED00027AD7 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				EEA83ABD284C957000C43B68 /* FishEyeFragmentShader1.glsl */,
-				EEA83ABC284C957000C43B68 /* FishEyeFragmentShader2.glsl */,
-				EECEE4D4284B8BA80057D585 /* FishEyeFragmentShader.glsl */,
+				EEA83ABD284C957000C43B68 /* FishEyeFragmentShader.glsl */,
+				EEA83ABC284C957000C43B68 /* FishEyeFragmentShader1.glsl */,
+				EECEE4D4284B8BA80057D585 /* FishEyeFragmentShader2.glsl */,
+				EE97F97028F66C4000162288 /* FishEyeFragmentShader3.glsl */,
 				EE6B20B9284B482800027AD7 /* SimpleVertexShader.glsl */,
 			);
 			path = Shaders;
@@ -193,7 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				EED40C00286171DC0097435C /* fish2sphere180.jpg */,
-				EE3C92D62856E30B0048D12C /* TestImage.jpg */,
+				EE3C92D62856E30B0048D12C /* PicassoTower.jpg */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -278,11 +282,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A54891122A8329700D4B25A /* Main.storyboard in Resources */,
-				EEA83AC0284C957000C43B68 /* FishEyeFragmentShader1.glsl in Resources */,
-				EEA83ABE284C957000C43B68 /* FishEyeFragmentShader2.glsl in Resources */,
+				EEA83AC0284C957000C43B68 /* FishEyeFragmentShader.glsl in Resources */,
+				EEA83ABE284C957000C43B68 /* FishEyeFragmentShader1.glsl in Resources */,
 				EE6B20BC284B482800027AD7 /* SimpleVertexShader.glsl in Resources */,
-				EECEE4D5284B8BA80057D585 /* FishEyeFragmentShader.glsl in Resources */,
-				EE3C92D72856E30B0048D12C /* TestImage.jpg in Resources */,
+				EECEE4D5284B8BA80057D585 /* FishEyeFragmentShader2.glsl in Resources */,
+				EE3C92D72856E30B0048D12C /* PicassoTower.jpg in Resources */,
+				EE97F97128F66C4000162288 /* FishEyeFragmentShader3.glsl in Resources */,
 				EED40C03286171DC0097435C /* fish2sphere180.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,13 +296,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EEA83ABF284C957000C43B68 /* FishEyeFragmentShader2.glsl in Resources */,
+				EEA83ABF284C957000C43B68 /* FishEyeFragmentShader1.glsl in Resources */,
 				3A4DDD6D2283D9150095BC87 /* LaunchScreen.storyboard in Resources */,
-				EECEE4D6284B8BA80057D585 /* FishEyeFragmentShader.glsl in Resources */,
-				EEA83AC1284C957000C43B68 /* FishEyeFragmentShader1.glsl in Resources */,
+				EECEE4D6284B8BA80057D585 /* FishEyeFragmentShader2.glsl in Resources */,
+				EEA83AC1284C957000C43B68 /* FishEyeFragmentShader.glsl in Resources */,
 				EE6B20BD284B482800027AD7 /* SimpleVertexShader.glsl in Resources */,
+				EE97F97228F66C4000162288 /* FishEyeFragmentShader3.glsl in Resources */,
 				EED40C04286171DC0097435C /* fish2sphere180.jpg in Resources */,
-				EE3C92D82856E30B0048D12C /* TestImage.jpg in Resources */,
+				EE3C92D82856E30B0048D12C /* PicassoTower.jpg in Resources */,
 				3A54891422A8329700D4B25A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
