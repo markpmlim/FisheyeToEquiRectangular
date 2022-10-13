@@ -89,7 +89,7 @@ To get the 2:1 equirectangular output without artifacts, run the demo with the f
 ![](ExpectedOutput3.png)
 
 
-**Notes**: To save an image from a generated equirectangular texture, scaling is required because OpenGL's texture coordinate system is always in the ratio 1:1.
+**Notes**: To save an image from a generated equirectangular texture, scaling might be required because OpenGL's texture coordinate system is always in the ratio 1:1.
 
 
 The code for the fragment shader *FishEyeFragmentShader.glsl* was originally derived from the diagram below lifted from Paul Bourke's site:
