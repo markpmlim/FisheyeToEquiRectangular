@@ -78,7 +78,7 @@ To get a 1:1 output, use *FishEyeFragmentShader1.glsl*.
 For this case, the range of the longitudinal values is the same as that of its latitudinal values. You have to edit two UI widgets using XCode's Interface Builder module so that the ratios of the window and view sizes are 1:1 since their display rectangles had been set to the ratio 2:1. Otherwise, the output looks like this:
 
 
-![](ExpectedOutput2png)
+![](ExpectedOutput2.png)
 
 The fragment shader *FishEyeFragmentShader2.glsl* is a variation of *FishEyeFragmentShader1.glsl*. The fisheye's image resolution is not used in the projection.
 
