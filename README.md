@@ -1,4 +1,4 @@
-## Convert a FishEye image to an EquiRectangular image
+## Convert a Single FishEye image to an EquiRectangular image
 
 
 This project attempts to convert single fisheye images to 2:1 equirectangular images or 1:1 square images.
@@ -9,12 +9,12 @@ This project attempts to convert single fisheye images to 2:1 equirectangular im
 
 The mathematics of the conversion is simple but implementation in glsl can lead to unexpected output.
 
-In general, when one needs to convert a 2D input image from one format into another, a 3D vector must be generated using the texture coordinates of the 2D output image, which in OpenGL, the range is [0.0, 1.0] for both the u-axis and v-axis. The 3D vector is then used to generate a pair of texture coordinates which is then used to access the input image.
+In general, when one needs to convert a 2D input image from one format into another, a 3D vector must be generated using the texture coordinates of the 2D output texture, which in OpenGL, the range is [0.0, 1.0] for both the u-axis and v-axis. The 3D vector is then used to generate a pair of texture coordinates which is then used to access the input image.
 
 <br />
 <br />
 
-Refer to the source code of the fragment shader *FishEyeFragmentShader1.glsl*.
+Refer to the source code of the fragment shader *FishEyeFragmentShader.glsl*.
 
 The texture coordinates of the current fragment being processed is converted to a pair of Cartesian coordinates by multiplying its value with the pixel width of the input (fisheye) image. The resulting value is passed to the function *fish2sphere*  which is a GLSL port of Paul Bourke's function of the same name.
 
@@ -64,21 +64,29 @@ BTW, we could re-write the 2 equations above as:
 ```
 
 
-The expected output of the equirectangular images is:
+The expected output of the equirectangular image is:
 
 ![](ExpectedOutput.png)
 
 
-To get a 1:1 output, use *FishEyeFragmentShader2.glsl*. 
+To get a 1:1 output, use *FishEyeFragmentShader1.glsl*. 
 
 
-![](ExpectedOutput2.png)
+![](ExpectedOutput1.png)
 
 
-In this case, the range of the longitudinal values is the same as that of its latitudinal values. You have to edit two UI widgets using XCode's Interface Builder module so that the ratios of the window and view sizes are 1:1 since their display rectangles had been set to the ratio 2:1. Otherwise, the output looks like this:
+For this case, the range of the longitudinal values is the same as that of its latitudinal values. You have to edit two UI widgets using XCode's Interface Builder module so that the ratios of the window and view sizes are 1:1 since their display rectangles had been set to the ratio 2:1. Otherwise, the output looks like this:
 
 
-![](Output.png)
+![](ExpectedOutput2png)
+
+The fragment shader *FishEyeFragmentShader2.glsl* is a variation of *FishEyeFragmentShader1.glsl*. The fisheye's image resolution is not used in the projection.
+
+
+To get the 2:1 equirectangular output without artifacts, run the demo with the fragment shader *FishEyeFragmentShader3.glsl*.  Instead of projecting the single fisheye image to the entire 2:1 equirectangular region, we map it to the central part of the latter.  It is not necessary to set texture wrap to GL_CLAMP_TO_BORDER.
+
+
+![](ExpectedOutput3.png)
 
 
 **Notes**: To save an image from a generated equirectangular texture, scaling is required because OpenGL's texture coordinate system is always in the ratio 1:1.
