@@ -1,7 +1,7 @@
-## Convert a Single FishEye image to an EquiRectangular image
+## Convert a Circular FishEye image to an EquiRectangular image
 
 
-This project attempts to convert single fisheye images to 2:1 equirectangular images or 1:1 square images.
+This project attempts to convert circular fisheye images to 2:1 equirectangular images or 1:1 square images.
 
 <br />
 <br />
@@ -83,7 +83,7 @@ For this case, the range of the longitudinal values is the same as that of its l
 The fragment shader *FishEyeFragmentShader2.glsl* is a variation of *FishEyeFragmentShader1.glsl*. The fisheye's image resolution is not used in the projection.
 
 
-To get the 2:1 equirectangular output without artifacts, run the demo with the fragment shader *FishEyeFragmentShader3.glsl*.  Instead of projecting the single fisheye image to the entire 2:1 equirectangular region, we map it to the central part of the latter.  It is not necessary to set texture wrap to GL_CLAMP_TO_BORDER.
+To get the 2:1 equirectangular output without artifacts, run the demo with the fragment shader *FishEyeFragmentShader3.glsl*.  Instead of projecting the circular fisheye image to the entire 2:1 equirectangular region, we map it to the central part of the latter.  It is not necessary to set texture wrap to GL_CLAMP_TO_BORDER.
 
 
 ![](ExpectedOutput3.png)
